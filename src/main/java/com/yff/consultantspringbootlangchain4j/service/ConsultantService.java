@@ -1,5 +1,6 @@
 package com.yff.consultantspringbootlangchain4j.service;
 
+import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.spring.AiService;
 import dev.langchain4j.service.spring.AiServiceWiringMode;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ public interface ConsultantService {
 //    String chat(String message);
 
     //流式返回
+    @SystemMessage(fromResource = "system.txt") //系统消息，设置AI的角色
     Flux<String> chat(String message);
 
 

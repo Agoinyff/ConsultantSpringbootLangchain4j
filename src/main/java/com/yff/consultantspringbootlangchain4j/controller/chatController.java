@@ -1,6 +1,5 @@
 package com.yff.consultantspringbootlangchain4j.controller;
 
-
 import com.yff.consultantspringbootlangchain4j.service.ConsultantService;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,24 +16,24 @@ import reactor.core.publisher.Flux;
 @RestController
 public class chatController {
 
-//    @Autowired
-//    private OpenAiChatModel model;
-//
-//
-//    @RequestMapping("/chat")
-//    public String chat(String message){
-//
-//        String chat = model.chat(message);
-//        return chat;
-//
-//
-//    }
+    // @Autowired
+    // private OpenAiChatModel model;
+    //
+    //
+    // @RequestMapping("/chat")
+    // public String chat(String message){
+    //
+    // String chat = model.chat(message);
+    // return chat;
+    //
+    //
+    // }
 
     @Autowired
     private ConsultantService consultantService;
 
-    @GetMapping(value = "/chat",produces = "text/html;charset=UTF-8")
-    public Flux<String> chat(String message){
+    @GetMapping(value = "/chat")
+    public Flux<String> chat(String message) {
         return consultantService.chat(message);
     }
 
