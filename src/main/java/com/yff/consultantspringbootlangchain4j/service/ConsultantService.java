@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
         chatModel = "openAiChatModel"
 
 )
+//@AiService  这里可以不写参数，默认就是自动装配
 public interface ConsultantService {
 
     //用于里聊天的方法
