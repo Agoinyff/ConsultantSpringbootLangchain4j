@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 
 /**
  * @author yff
@@ -32,8 +33,8 @@ public class chatController {
     @Autowired
     private ConsultantService consultantService;
 
-    @GetMapping("/chat")
-    public String chat(String message){
+    @GetMapping(value = "/chat",produces = "text/html;charset=UTF-8")
+    public Flux<String> chat(String message){
         return consultantService.chat(message);
     }
 
