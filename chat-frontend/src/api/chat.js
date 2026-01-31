@@ -7,14 +7,15 @@ import { BASE_URL, API_ENDPOINTS } from '@/config'
 /**
  * 发送聊天消息（流式响应）
  * @param {string} message - 用户消息
+ * @param {string} memoryId - 会话记忆 ID
  * @param {Object} callbacks - 回调函数对象
  * @param {Function} callbacks.onMessage - 收到消息片段时的回调
  * @param {Function} callbacks.onError - 发生错误时的回调
  * @param {Function} callbacks.onComplete - 完成时的回调
  * @returns {Promise<void>}
  */
-export const sendChatMessage = async (message, { onMessage, onError, onComplete }) => {
-    const url = `${BASE_URL}${API_ENDPOINTS.CHAT}?message=${encodeURIComponent(message)}`
+export const sendChatMessage = async (message, memoryId, { onMessage, onError, onComplete }) => {
+    const url = `${BASE_URL}${API_ENDPOINTS.CHAT}?memoryId=${encodeURIComponent(memoryId)}&message=${encodeURIComponent(message)}`
 
     try {
         const response = await fetch(url)

@@ -19,6 +19,9 @@ export function useChat() {
     const isConnected = ref(true)
     const currentStreamingMessage = ref(null)
 
+    // 会话记忆 ID（使用时间戳，整个会话期间保持不变）
+    const memoryId = ref(Date.now().toString())
+
     // 计算属性
     const hasMessages = computed(() => messages.value.length > 0)
     const lastMessage = computed(() => messages.value[messages.value.length - 1])
@@ -83,7 +86,7 @@ export function useChat() {
         currentStreamingMessage.value = assistantMessage
 
         try {
-            await sendChatMessage(trimmedContent, {
+            await sendChatMessage(trimmedContent, memoryId.value, {
                 onMessage: (data) => {
                     assistantMessage.content += data
                 },
@@ -111,10 +114,12 @@ export function useChat() {
     }
 
     /**
-     * 清空消息
+     * 清空消息并重置会话
      */
     const clearMessages = () => {
         messages.value = []
+        // 重置会话 ID，开启新会话
+        memoryId.value = Date.now().toString()
     }
 
     /**

@@ -1,6 +1,8 @@
 package com.yff.consultantspringbootlangchain4j.service;
 
+import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.SystemMessage;
+import dev.langchain4j.service.UserMessage;
 import dev.langchain4j.service.spring.AiService;
 import dev.langchain4j.service.spring.AiServiceWiringMode;
 import org.springframework.stereotype.Service;
@@ -15,7 +17,8 @@ import reactor.core.publisher.Flux;
         wiringMode = AiServiceWiringMode.EXPLICIT,//手动装配
         chatModel = "openAiChatModel",//指定使用的chatModel
         streamingChatModel = "openAiStreamingChatModel",//指定使用的流式chatModel
-        chatMemory = "chatMemory"//指定使用的记忆组件
+//        chatMemory = "chatMemory",//指定使用的记忆组件
+        chatMemoryProvider = "chatMemoryProvider" //指定使用的记忆组件提供者
 )
 //@AiService  这里可以不写参数，默认就是自动装配
 public interface ConsultantService {
@@ -25,7 +28,7 @@ public interface ConsultantService {
 
     //流式返回
     @SystemMessage(fromResource = "system.txt") //系统消息，设置AI的角色
-    Flux<String> chat(String message);
+    Flux<String> chat(@MemoryId String memoryId,@UserMessage String message);
 
 
 }

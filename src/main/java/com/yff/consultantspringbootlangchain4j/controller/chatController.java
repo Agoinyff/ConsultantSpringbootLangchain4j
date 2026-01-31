@@ -33,8 +33,8 @@ public class chatController {
     private ConsultantService consultantService;
 
     @GetMapping(value = "/chat")
-    public Flux<String> chat(String message) {
-        return consultantService.chat(message);
+    public Flux<String> chat(String memoryId,String message) {
+        return consultantService.chat(memoryId,message);
     }
 
 }
