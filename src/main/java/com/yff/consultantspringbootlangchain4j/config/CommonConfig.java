@@ -15,14 +15,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CommonConfig {
 
-    @Autowired
-    private OpenAiChatModel model;
-
-    @Bean   //注入容器
-    public ConsultantService consultantServiceConfig() {
-        return AiServices.builder(ConsultantService.class)
-                .chatModel(model)
-                .build(); //为其创建代理对象
-    }
+//    @Autowired
+//    private OpenAiChatModel model;
+//
+//    @Bean   //注入容器
+//    public ConsultantService consultantServiceConfig() {
+//        return AiServices.builder(ConsultantService.class)
+//                .chatModel(model)
+//                .build(); //为其创建代理对象
+//    }
 
 }
