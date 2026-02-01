@@ -2,6 +2,7 @@ package com.yff.consultantspringbootlangchain4j.config;
 
 
 import com.yff.consultantspringbootlangchain4j.service.ConsultantService;
+import dev.langchain4j.community.store.embedding.redis.RedisEmbeddingStore;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.DocumentSplitter;
 import dev.langchain4j.data.document.loader.ClassPathDocumentLoader;
@@ -40,6 +41,11 @@ public class CommonConfig {
 
     @Autowired
     private EmbeddingModel embeddingModel;
+
+    @Autowired
+    private RedisEmbeddingStore redisEmbeddingStore;
+
+
 //
 //    @Bean   //注入容器
 //    public ConsultantService consultantServiceConfig() {
@@ -75,15 +81,15 @@ public class CommonConfig {
     }
 
 
-    //构建向量数据库操作对象
+    //构建向量数据库操作对象   存储
     @Bean
     public EmbeddingStore embeddingStore() {
 
         //加载文档进内存
         List<Document> documents = ClassPathDocumentLoader.loadDocuments("content",new ApachePdfBoxDocumentParser());
 
-        //构建向量数据库操作对象
-        InMemoryEmbeddingStore inMemoryEmbeddingStore = new InMemoryEmbeddingStore();
+        //构建向量数据库操作对象    它操作的是内存版本的向量数据库对象
+//        InMemoryEmbeddingStore inMemoryEmbeddingStore = new InMemoryEmbeddingStore();
 
         //构建文档分割器对象
         DocumentSplitter recursive = DocumentSplitters.recursive(500,100);
@@ -91,21 +97,22 @@ public class CommonConfig {
 
         //构建一个EmbeddingStoreIngestor对象，完成文本数据切割，向量化，存储
         EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
-                .embeddingStore(inMemoryEmbeddingStore)
+//                .embeddingStore(inMemoryEmbeddingStore)
+                .embeddingStore(redisEmbeddingStore)
                 .documentSplitter(recursive)
                 .embeddingModel(embeddingModel)
                 .build();
         ingestor.ingest(documents);//将指定文档提取到创建此EmbeddingStoreIngestor期间指定的EmbeddingStore中
 
-        return inMemoryEmbeddingStore;
+        return redisEmbeddingStore;
     }
 
-    //构建向量数据库存储对象
+    //构建向量数据库存储对象   检索
     @Bean
-    public ContentRetriever contentRetriever(@Autowired EmbeddingStore embeddingStore) {
+    public ContentRetriever contentRetriever() {
 
        return EmbeddingStoreContentRetriever.builder()
-                .embeddingStore(embeddingStore)
+                .embeddingStore(redisEmbeddingStore)
                 .minScore(0.5)//设置最小相似度
                 .maxResults(3)//设置最多返回3条
                .embeddingModel(embeddingModel)

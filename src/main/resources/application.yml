@@ -18,6 +18,12 @@ langchain4j:
       model-name: text-embedding-v3
       log-requests: true
       log-responses: true
+      max-segments-per-batch: 10 #设置一次性最多给向量模型发送的最多数量
+
+  community:
+    redis:
+      host: 8.222.139.88
+      port: 6379
 
 
 
@@ -28,6 +34,9 @@ logging:
 spring:
   data:
     redis:
-      port: 13854
-      host: redis-13854.c294.ap-northeast-1-2.ec2.cloud.redislabs.com
-      password: UCB51vDJGhWuhPiiIbsGBurLMiZI5Wuo
+      host: 8.222.139.88
+      port: 6379
+
+#      port: 13854
+#      host: redis-13854.c294.ap-northeast-1-2.ec2.cloud.redislabs.com
+#      password: UCB51vDJGhWuhPiiIbsGBurLMiZI5Wuo
