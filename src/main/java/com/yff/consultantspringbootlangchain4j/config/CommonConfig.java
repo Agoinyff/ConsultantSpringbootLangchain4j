@@ -10,6 +10,7 @@ import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.memory.ChatMemory;
 import dev.langchain4j.memory.chat.ChatMemoryProvider;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
+import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
@@ -36,6 +37,9 @@ public class CommonConfig {
 
     @Autowired
     private ChatMemoryStore chatMemoryStore;
+
+    @Autowired
+    private EmbeddingModel embeddingModel;
 //
 //    @Bean   //注入容器
 //    public ConsultantService consultantServiceConfig() {
@@ -89,6 +93,7 @@ public class CommonConfig {
         EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
                 .embeddingStore(inMemoryEmbeddingStore)
                 .documentSplitter(recursive)
+                .embeddingModel(embeddingModel)
                 .build();
         ingestor.ingest(documents);//将指定文档提取到创建此EmbeddingStoreIngestor期间指定的EmbeddingStore中
 
@@ -97,12 +102,13 @@ public class CommonConfig {
 
     //构建向量数据库存储对象
     @Bean
-    public ContentRetriever contentRetriever(EmbeddingStore embeddingStore) {
+    public ContentRetriever contentRetriever(@Autowired EmbeddingStore embeddingStore) {
 
        return EmbeddingStoreContentRetriever.builder()
                 .embeddingStore(embeddingStore)
                 .minScore(0.5)//设置最小相似度
                 .maxResults(3)//设置最多返回3条
+               .embeddingModel(embeddingModel)
                 .build();
 
     }
